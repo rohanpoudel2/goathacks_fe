@@ -75,5 +75,17 @@ module.exports = {
     800: '#991B1B',
     900: '#7F1D1D',
   },
-  ride: {},
+  ride: {
+    pale_green: { 50: 'E3F0EE', 100: '#669794' },
+    pale_orange: '#F7F1EC',
+    pale_yellow: '#F7F1EC',
+    dark_green: '#F7F1EC',
+    orange: '#F7F1EC',
+    gray: '#C5C8D2',
+    green: '#669794',
+    pale_brown: '#F7E5E2',
+    pale_pink: '#F8EAE8',
+    brown: '#E1B179',
+    dark_orange: '#C45C4B',
+  },
 };
