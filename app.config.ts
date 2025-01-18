@@ -38,7 +38,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
-    bundleIdentifier: Env.BUNDLE_ID,
+    // bundleIdentifier: Env.BUNDLE_ID,
+    bundleIdentifier: 'com.rideapp.gang',
+    config: {
+      googleMapsApiKey: 'AIzaSyCU4WcQn2EeerueIzjtHydTypx4Uw4g3qs',
+    },
   },
   experiments: {
     typedRoutes: true,
@@ -55,12 +59,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
   },
   plugins: [
-    [
-      '@rnmapbox/maps',
-      {
-        RNMapboxMapsVersion: '11.8.0',
-      },
-    ],
     [
       'expo-splash-screen',
       {
