@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { z } from 'zod';
 
@@ -53,7 +54,7 @@ export default function AddRequest() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50 p-4">
+    <SafeAreaView className="flex-1 bg-red-50 p-4">
       <Stack.Screen
         options={{
           headerShown: false,
@@ -65,29 +66,81 @@ export default function AddRequest() {
         </Link>
         <Button label="POST" onPress={handleSubmit(onSubmit)} />
       </View>
+
       <View>
         <Text className="mb-4 text-xl font-bold text-gray-900">
           Add New Request
         </Text>
 
-        <View className="mb-4">
+        <View className="mb-20">
           <Text className="mb-2 font-medium text-gray-700">From</Text>
-          <ControlledInput
-            name="from"
-            control={control}
-            placeholder="Enter starting location"
-            className="w-full rounded border border-gray-300 p-3"
+          <GooglePlacesAutocomplete
+            placeholder="Where To ?"
+            minLength={4}
+            listViewDisplayed="auto"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              console.log(details?.geometry.location, data);
+            }}
+            query={{
+              key: 'AIzaSyCU4WcQn2EeerueIzjtHydTypx4Uw4g3qs',
+              language: 'en',
+            }}
+            nearbyPlacesAPI="GooglePlacesSearch"
+            debounce={200}
+            renderRow={(rowData) => {
+              const title = rowData.structured_formatting.main_text;
+              const address = rowData.structured_formatting.secondary_text;
+              return (
+                <View>
+                  <Text style={{ fontSize: 14 }}>{title}</Text>
+                  <Text style={{ fontSize: 14 }}>{address}</Text>
+                </View>
+              );
+            }}
+            styles={{
+              listView: {
+                position: 'absolute',
+                backgroundColor: '#FFF',
+                zIndex: 10,
+              },
+            }}
           />
         </View>
 
-        <View className="mb-4">
+        <View className="mb-20">
           <Text className="mb-2 font-medium text-gray-700">To</Text>
-          <ControlledInput
-            name="to"
-            control={control}
-            placeholder="Enter destination"
-            className="w-full rounded border border-gray-300 p-3"
-            multiline
+          <GooglePlacesAutocomplete
+            placeholder="Where To ?"
+            minLength={4}
+            listViewDisplayed="auto"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              console.log(details?.geometry.location, data);
+            }}
+            query={{
+              key: 'AIzaSyCU4WcQn2EeerueIzjtHydTypx4Uw4g3qs',
+              language: 'en',
+            }}
+            nearbyPlacesAPI="GooglePlacesSearch"
+            debounce={200}
+            renderRow={(rowData) => {
+              const title = rowData.structured_formatting.main_text;
+              const address = rowData.structured_formatting.secondary_text;
+              return (
+                <View>
+                  <Text style={{ fontSize: 14 }}>{title}</Text>
+                  <Text style={{ fontSize: 14 }}>{address}</Text>
+                </View>
+              );
+            }}
+            styles={{
+              listView: {
+                position: 'absolute',
+                backgroundColor: '#FFF',
+                zIndex: 10,
+              },
+            }}
           />
         </View>
 

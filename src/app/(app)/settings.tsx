@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Env } from '@env';
+import { Link } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 
 import { Item } from '@/components/settings/item';
@@ -13,7 +14,7 @@ import {
   Text,
   View,
 } from '@/components/ui';
-import { Github, Rate, Share, Support, Website } from '@/components/ui/icons';
+import { Share } from '@/components/ui/icons';
 import { translate, useAuth } from '@/lib';
 
 export default function Settings() {
@@ -24,7 +25,6 @@ export default function Settings() {
   return (
     <>
       <FocusAwareStatusBar />
-
       <ScrollView>
         <View className="flex-1 px-4 pt-16 ">
           <Text className="text-xl font-bold">
@@ -33,6 +33,9 @@ export default function Settings() {
           <ItemsContainer title="settings.generale">
             <LanguageItem />
             <ThemeItem />
+            <Link href="/profile">
+              <Item text="settings.profile" value={''} />
+            </Link>
           </ItemsContainer>
 
           <ItemsContainer title="settings.about">
@@ -46,19 +49,9 @@ export default function Settings() {
               icon={<Share color={iconColor} />}
               onPress={() => {}}
             />
-            <Item
-              text="settings.rate"
-              icon={<Rate color={iconColor} />}
-              onPress={() => {}}
-            />
-            <Item
-              text="settings.support"
-              icon={<Support color={iconColor} />}
-              onPress={() => {}}
-            />
           </ItemsContainer>
 
-          <ItemsContainer title="settings.links">
+          {/* <ItemsContainer title="settings.links">
             <Item text="settings.privacy" onPress={() => {}} />
             <Item text="settings.terms" onPress={() => {}} />
             <Item
@@ -71,7 +64,7 @@ export default function Settings() {
               icon={<Website color={iconColor} />}
               onPress={() => {}}
             />
-          </ItemsContainer>
+          </ItemsContainer> */}
 
           <View className="my-8">
             <ItemsContainer>

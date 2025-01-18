@@ -1,5 +1,6 @@
 // Import  global CSS file
 import '../../global.css';
+import 'react-native-get-random-values';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@react-navigation/native';
