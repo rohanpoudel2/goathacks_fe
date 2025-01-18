@@ -56,6 +56,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     [
+      '@rnmapbox/maps',
+      {
+        RNMapboxMapsVersion: '11.8.0',
+      },
+    ],
+    [
       'expo-splash-screen',
       {
         backgroundColor: '#2E3C4B',
