@@ -5,7 +5,13 @@ import { useForm } from 'react-hook-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
-import { Button, ControlledInput, Text, View } from '@/components/ui';
+import {
+  Button,
+  ControlledInput,
+  Text,
+  TouchableOpacity,
+  View,
+} from '@/components/ui';
 
 const schema = z.object({
   name: z.string().optional(),
@@ -25,12 +31,17 @@ export type FormType = z.infer<typeof schema>;
 
 export type LoginFormProps = {
   onSubmit?: SubmitHandler<FormType>;
+  onForgotPassword?: () => void;
 };
 
-export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
+export const LoginForm = ({
+  onSubmit = () => {},
+  onForgotPassword = () => {},
+}: LoginFormProps) => {
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -41,14 +52,13 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
         <View className="items-center justify-center">
           <Text
             testID="form-title"
-            className="pb-6 text-center text-4xl font-bold"
+            className="pb-6 text-center text-4xl font-bold text-orange-700"
           >
-            Sign In
+            CommuteMate
           </Text>
 
-          <Text className="mb-6 max-w-xs text-center text-gray-500">
-            Welcome! 👋 This is a demo login screen! Feel free to use any email
-            and password to sign in and try it out.
+          <Text className="mb-6 max-w-xs text-center text-ride-pale_green-100">
+            Your Commute, Made Easy."
           </Text>
         </View>
 
@@ -73,11 +83,24 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
           placeholder="***"
           secureTextEntry={true}
         />
+
         <Button
           testID="login-button"
-          label="Login"
+          label="Sign In"
           onPress={handleSubmit(onSubmit)}
         />
+
+        <Button
+          testID="signup-button"
+          label="Sign Up!"
+          onPress={handleSubmit(onSubmit)}
+        />
+
+        <TouchableOpacity onPress={onForgotPassword}>
+          <Text className="mt-2 text-right text-blue-500">
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
