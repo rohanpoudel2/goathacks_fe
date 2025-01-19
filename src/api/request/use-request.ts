@@ -11,7 +11,7 @@ export const useRequest = createQuery<Response, Variables, AxiosError>({
   queryKey: ['requests'],
   fetcher: (variables) => {
     return client
-      .get(`ride-requests/${variables.id}`)
+      .get(`rides/requests/${variables.id}`)
       .then((response) => response.data);
   },
 });

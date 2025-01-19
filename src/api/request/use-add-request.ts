@@ -12,7 +12,7 @@ export const useAddRequest = createMutation<Response, Response, AxiosError>({
   mutationFn: async (variables) => {
     try {
       console.log({
-        url: 'ride-requests/',
+        url: 'rides/requests/',
         method: 'POST',
         data: variables,
         headers: {
@@ -20,7 +20,7 @@ export const useAddRequest = createMutation<Response, Response, AxiosError>({
         },
       });
       const response = await client({
-        url: 'ride-requests/',
+        url: 'rides/requests/',
         method: 'POST',
         data: variables,
         headers: {

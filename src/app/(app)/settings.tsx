@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Env } from '@env';
 import { Link } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 
@@ -14,12 +13,13 @@ import {
   Text,
   View,
 } from '@/components/ui';
-import { Share } from '@/components/ui/icons';
 import { translate, useAuth } from '@/lib';
+import { useAppState } from '@/lib/hooks/open-first-time';
 
 export default function Settings() {
   const signOut = useAuth.use.signOut();
   const { colorScheme } = useColorScheme();
+  const { setFirstTimeOpen } = useAppState();
   const iconColor =
     colorScheme === 'dark' ? colors.neutral[400] : colors.neutral[500];
   return (
@@ -38,18 +38,18 @@ export default function Settings() {
             </Link>
           </ItemsContainer>
 
-          <ItemsContainer title="settings.about">
+          {/* <ItemsContainer title="settings.about">
             <Item text="settings.app_name" value={Env.NAME} />
             <Item text="settings.version" value={Env.VERSION} />
-          </ItemsContainer>
+          </ItemsContainer> */}
 
-          <ItemsContainer title="settings.support_us">
+          {/* <ItemsContainer title="settings.support_us">
             <Item
               text="settings.share"
               icon={<Share color={iconColor} />}
               onPress={() => {}}
             />
-          </ItemsContainer>
+          </ItemsContainer> */}
 
           {/* <ItemsContainer title="settings.links">
             <Item text="settings.privacy" onPress={() => {}} />
@@ -68,7 +68,13 @@ export default function Settings() {
 
           <View className="my-8">
             <ItemsContainer>
-              <Item text="settings.logout" onPress={signOut} />
+              <Item
+                text="settings.logout"
+                onPress={() => {
+                  setFirstTimeOpen(true);
+                  signOut();
+                }}
+              />
             </ItemsContainer>
           </View>
         </View>

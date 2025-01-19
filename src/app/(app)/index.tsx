@@ -6,7 +6,9 @@ import React from 'react';
 
 import { useRequests } from '@/api';
 import type { Request } from '@/api/request';
+import RoleSelectionSplashScreen from '@/components/splash-screen';
 import { FocusAwareStatusBar, SafeAreaView, Text, View } from '@/components/ui';
+import { useAppState } from '@/lib/hooks/open-first-time';
 
 export interface Data {
   from: string;
@@ -23,14 +25,11 @@ const renderRequestsItem = ({ item }: { item: Request }) => {
           From: {item.start_location}
         </Text>
         <Text className="text-lg font-bold text-gray-900">
-          To: {item.end_location}
+          To: {item.destination_location}
         </Text>
         <View className="absolute inset-y-0 right-0 flex justify-center bg-red-50 p-2">
-          <Text className="text-gray-700">
-            Departure: {dayjs(item.start_time).format('MMM D, YYYY')}
-          </Text>
-          <Text className="text-gray-700">
-            Arrival: {dayjs(item.end_time).format('MMM D, YYYY')}
+          <Text className="text-center text-gray-700">
+            Time {`\n ${dayjs(item.start_time).format('h:mm A')}`}
           </Text>
         </View>
       </View>
@@ -41,20 +40,26 @@ const renderRequestsItem = ({ item }: { item: Request }) => {
 export default function Feed() {
   const { data, isPending, isError } = useRequests();
 
-  // if (isPending) {
-  //   return (
-  //     <SafeAreaView>
-  //       <Text>Loading...</Text>
-  //     </SafeAreaView>
-  //   );
-  // }
-  // if (isError) {
-  //   return (
-  //     <SafeAreaView>
-  //       <Text>Error</Text>
-  //     </SafeAreaView>
-  //   );
-  // }
+  const { isFirstTimeOpen } = useAppState();
+
+  if (isFirstTimeOpen) {
+    return <RoleSelectionSplashScreen />;
+  }
+
+  if (isPending) {
+    return (
+      <SafeAreaView>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+  if (isError) {
+    return (
+      <SafeAreaView>
+        <Text>Error</Text>
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView className="mx-5 flex-1">
       <FocusAwareStatusBar />

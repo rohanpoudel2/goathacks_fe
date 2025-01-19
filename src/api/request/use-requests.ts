@@ -10,6 +10,6 @@ type Variables = void;
 export const useRequests = createQuery<Response, Variables, AxiosError>({
   queryKey: ['requests'],
   fetcher: () => {
-    return client.get(`ride-requests`).then((response) => response.data);
+    return client.get(`rides/requests`).then((response) => response.data);
   },
 });
