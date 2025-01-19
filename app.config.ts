@@ -43,6 +43,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     config: {
       googleMapsApiKey: 'AIzaSyCU4WcQn2EeerueIzjtHydTypx4Uw4g3qs',
     },
+    infoPlist: {
+      NSLocationWhenInUseUsageDescription:
+        'This app requires access to your location when open.',
+      NSLocationAlwaysAndWhenInUseUsageDescription:
+        'This app requires access to your location even when closed.',
+      NSLocationAlwaysUsageDescription:
+        'This app requires access to your location when open.',
+    },
   },
   experiments: {
     typedRoutes: true,
@@ -59,6 +67,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: 'metro',
   },
   plugins: [
+    [
+      'expo-location',
+      {
+        locationAlwaysAndWhenInUsePermission:
+          'Allow $(PRODUCT_NAME) to use your location.',
+        locationAlwaysPermission: 'Allow $(PRODUCT_NAME) to use your location.',
+        locationWhenInUsePermission:
+          'Allow $(PRODUCT_NAME) to use your location.',
+        isIosBackgroundLocationEnabled: true,
+        isAndroidBackgroundLocationEnabled: true,
+      },
+    ],
     [
       'expo-splash-screen',
       {

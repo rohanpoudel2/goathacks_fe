@@ -13,16 +13,19 @@ export default function Auth() {
   const router = useRouter();
   const signIn = useAuth.use.signIn();
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+  const [isLogin, setIsLogin] = useState(true);
 
   // Login form submission
   const onLoginSubmit: LoginFormProps['onSubmit'] = async (data) => {
     try {
       setErrorMessage('');
-      const response = await axios.post('https://54.83.125.17/users/login/', {
-        username: data.username,
-        password: data.password,
-      });
+      const response = await axios.post(
+        'https://316e-207-174-167-55.ngrok-free.app/users/login/',
+        {
+          username: data.username,
+          password: data.password,
+        }
+      );
 
       const tokens = response.data;
       if (!tokens.token) {
@@ -30,7 +33,7 @@ export default function Auth() {
         return;
       }
 
-      signIn({ access: tokens.token, refresh: tokens.token });
+      signIn({ access: tokens.token });
       router.push('/');
     } catch (error) {
       setErrorMessage(
@@ -46,16 +49,17 @@ export default function Auth() {
     try {
       setErrorMessage('');
       const response = await axios.post(
-        'https://54.83.125.17/users/signup/',
+        'https://316e-207-174-167-55.ngrok-free.app/users/register/',
         data
       );
 
       if (response.status === 201) {
-        setIsLogin(true); // Switch to login after successful signup
+        setIsLogin(true);
       } else {
         setErrorMessage('Signup failed. Please try again.');
       }
     } catch (error) {
+      console.log(error);
       setErrorMessage(
         axios.isAxiosError(error) && error.response
           ? error.response.data.message || 'Signup failed'
