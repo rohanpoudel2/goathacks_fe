@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
 
-import { Cover } from '@/components/cover';
 import {
   Button,
   FocusAwareStatusBar,
@@ -14,11 +13,8 @@ export default function Onboarding() {
   const [_, setIsFirstTime] = useIsFirstTime();
   const router = useRouter();
   return (
-    <View className="flex h-full items-center  justify-center">
+    <View className={` flex h-full  items-center justify-center`}>
       <FocusAwareStatusBar />
-      <View className="w-full flex-1">
-        <Cover />
-      </View>
       <View className="justify-end ">
         <Text className="my-3 text-center text-5xl font-bold">CommuteMate</Text>
       </View>

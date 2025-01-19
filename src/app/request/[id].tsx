@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { Linking, Pressable } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 import { useRequest } from '@/api';
@@ -11,6 +12,8 @@ import {
   Text,
   View,
 } from '@/components/ui';
+import { translate } from '@/lib';
+import { useThemeConfig } from '@/lib/use-theme-config';
 
 const GOOGLE_API_KEY = 'AIzaSyCU4WcQn2EeerueIzjtHydTypx4Uw4g3qs';
 
@@ -77,7 +80,7 @@ export default function Request() {
 
   // Function to fetch route between start and end locations
   const [estimatedEndTime, setEstimatedEndTime] = useState<string | null>(null);
-
+  const theme = useThemeConfig();
   const fetchRoute = async () => {
     try {
       const response = await fetch(
@@ -199,30 +202,42 @@ export default function Request() {
           />
         )}
       </MapView>
-      <View className="flex-1 bg-gray-50 p-4">
-        <Stack.Screen options={{ title: 'Request', headerBackTitle: 'Feed' }} />
+      <View className={`flex-1 ${theme.dark ? 'bg-black' : 'bg-gray-50'}  p-4`}>
+        <Stack.Screen options={{ title: 'Request', headerBackTitle: 'Home' }} />
         <Text className="mb-4 text-2xl font-bold text-gray-900">
-          Request Creator: {data.creator_type}
+          {translate('request.request_creator')}:{' '}
+          <Text className="text-2xl">
+            {data.creator_type.charAt(0).toUpperCase() +
+              data.creator_type.slice(1)}
+          </Text>
         </Text>
-        <View className="space-y-4">
-          <View className="rounded-lg border border-gray-300 bg-white p-4 shadow-sm">
-            <Text className="text-lg font-semibold text-gray-800">
-              From: {data.start_location}
-            </Text>
-            <Text className="text-lg font-semibold text-gray-800">
-              To: {data.destination_location}
-            </Text>
-          </View>
-          <View className="flex-row justify-between rounded-lg border border-gray-300 bg-white p-4 shadow-sm">
+        <View className="gap-5 space-y-4">
+          <View
+            className={`gap-10 rounded-lg border border-gray-300 ${theme.dark ? 'bg-gray-800' : 'bg-white'}  p-4 shadow-sm`}
+          >
             <View>
-              <Text className="text-sm font-medium text-gray-600">Depart</Text>
+              <Text className="text-lg font-semibold text-gray-800">From:</Text>
+              <Text className="">{data.start_location}</Text>
+            </View>
+            <View>
+              <Text className="text-lg font-semibold text-gray-800">To:</Text>
+              <Text className="">{data.destination_location}</Text>
+            </View>
+          </View>
+          <View
+            className={`flex-row justify-between rounded-lg border border-gray-300 ${theme.dark ? 'bg-gray-800' : 'bg-white'} p-4 shadow-sm`}
+          >
+            <View>
+              <Text className="text-sm font-medium text-gray-600">
+                {translate('request.depart')}
+              </Text>
               <Text className="text-lg font-bold text-gray-800">
                 {dayjs(data.start_time).format('h:mm A')}
               </Text>
             </View>
             <View>
               <Text className="text-sm font-medium text-gray-600">
-                Estimated Arrival
+                {translate('request.estimated_arrival')}
               </Text>
               <Text className="text-lg font-bold text-gray-800">
                 {estimatedEndTime ? estimatedEndTime : 'Calculating...'}
@@ -230,6 +245,17 @@ export default function Request() {
             </View>
           </View>
         </View>
+
+        <Pressable
+          className={`mt-5 h-10 w-full  items-center justify-center bg-orange-500`}
+          onPress={() =>
+            Linking.openURL(
+              `https://api.whatsapp.com/send?phone=1${data?.creator_phone_number}&text=Hey!, I'm interested to ride with you from ${data.start_location} to ${data.destination_location}.`
+            )
+          }
+        >
+          <Text className="font-bold text-white">I'm Interested</Text>
+        </Pressable>
       </View>
     </>
   );

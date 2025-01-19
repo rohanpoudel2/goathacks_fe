@@ -8,7 +8,9 @@ import { useRequests } from '@/api';
 import type { Request } from '@/api/request';
 import RoleSelectionSplashScreen from '@/components/splash-screen';
 import { FocusAwareStatusBar, SafeAreaView, Text, View } from '@/components/ui';
+import { translate } from '@/lib';
 import { useAppState } from '@/lib/hooks/open-first-time';
+import { useThemeConfig } from '@/lib/use-theme-config';
 
 export interface Data {
   from: string;
@@ -17,30 +19,43 @@ export interface Data {
   arrival: string;
 }
 
-const renderRequestsItem = ({ item }: { item: Request }) => {
-  return (
+export default function Feed() {
+  const { data, isPending, isError } = useRequests();
+  const theme = useThemeConfig();
+  const { isFirstTimeOpen } = useAppState();
+
+  const renderRequestsItem = ({ item }: { item: Request }) => (
     <Link href={`/request/${item.request_id}`} className="mb-4 w-full ">
-      <View className="relative w-full rounded-lg bg-gray-100 p-4">
-        <Text className="text-lg font-bold text-gray-900">
-          From: {item.start_location}
-        </Text>
-        <Text className="text-lg font-bold text-gray-900">
-          To: {item.destination_location}
-        </Text>
-        <View className="absolute inset-y-0 right-0 flex justify-center bg-red-50 p-2">
+      <View
+        className={`relative w-full rounded-lg ${
+          theme.dark ? 'bg-gray-800' : 'bg-gray-100'
+        } p-4`}
+      >
+        <View className="w-[280px] gap-5">
+          <Text className="text-lg text-gray-900">
+            <Text className="font-bold">{translate('request.from')}:</Text>{' '}
+            {item.start_location.split(',').slice(1, -1).join(', ') ||
+              item.start_location}
+          </Text>
+          <Text className="text-lg text-gray-900">
+            <Text className="font-bold">{translate('request.to')}:</Text>{' '}
+            {item.destination_location.split(',').slice(1, -1).join(', ') ||
+              item.destination_location}
+          </Text>
+        </View>
+        <View
+          className={`absolute inset-y-0 right-0 flex justify-center ${
+            theme.dark ? 'bg-orange-500' : 'bg-orange-100'
+          }  p-2`}
+        >
           <Text className="text-center text-gray-700">
-            Time {`\n ${dayjs(item.start_time).format('h:mm A')}`}
+            {translate('request.time')}{' '}
+            {`\n ${dayjs(item.start_time).format('h:mm A')}`}
           </Text>
         </View>
       </View>
     </Link>
   );
-};
-
-export default function Feed() {
-  const { data, isPending, isError } = useRequests();
-
-  const { isFirstTimeOpen } = useAppState();
 
   if (isFirstTimeOpen) {
     return <RoleSelectionSplashScreen />;
@@ -65,13 +80,15 @@ export default function Feed() {
       <FocusAwareStatusBar />
       <View className="flex-row items-center justify-between">
         <View>
-          <Text className="text-2xl font-bold">Hi! There</Text>
+          <Text className="text-2xl font-bold">
+            {translate('home.greetings_first')}
+          </Text>
           <Text className="font-normal text-gray-700">
-            We are glad you're here
+            {translate('home.greetings_second')}
           </Text>
         </View>
         <Link href="/request/add-request">
-          <Ionicons name="add-circle-outline" size={32} color="black" />
+          <Ionicons name="add-circle" size={32} color="darkorange" />
         </Link>
       </View>
       <FlashList

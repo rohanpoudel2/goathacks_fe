@@ -1,7 +1,8 @@
 import Entypo from '@expo/vector-icons/Entypo';
 import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs';
 import { Link, Stack, useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { showMessage } from 'react-native-flash-message';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -10,14 +11,16 @@ import { z } from 'zod';
 
 import { queryClient, useAddRequest } from '@/api';
 import {
-  Button,
   ControlledInput,
+  Pressable,
   SafeAreaView,
   showErrorMessage,
   Text,
   View,
 } from '@/components/ui';
+import { translate } from '@/lib';
 import { useAppState } from '@/lib/hooks/open-first-time';
+import { useThemeConfig } from '@/lib/use-theme-config';
 
 const GOOGLE_API_KEY = 'AIzaSyCU4WcQn2EeerueIzjtHydTypx4Uw4g3qs';
 
@@ -35,6 +38,7 @@ export default function AddRequest() {
   const [startDate, setStartDate] = useState(new Date());
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const router = useRouter();
+
   const {
     control,
     handleSubmit,
@@ -44,8 +48,14 @@ export default function AddRequest() {
     resolver: zodResolver(schema),
   });
 
-  const { sessionType } = useAppState();
+  const theme = useThemeConfig();
 
+  useEffect(() => {
+    const currentTime = new Date().toISOString();
+    setValue('start_time', currentTime, { shouldValidate: true });
+  }, [setValue]);
+
+  const { sessionType } = useAppState();
   const { mutate: addRequest, isPending } = useAddRequest();
 
   const handleStartDateConfirm = (selectedDate: Date) => {
@@ -83,7 +93,6 @@ export default function AddRequest() {
 
   const onSubmit = async (data: FormType) => {
     showMessage({ message: 'Fetching location data...', type: 'info' });
-
     const startCoords = await getCoordinates(data.start_location);
     const endCoords = await getCoordinates(data.end_location);
 
@@ -92,10 +101,12 @@ export default function AddRequest() {
       return;
     }
 
+    const endTime = dayjs(data.start_time).add(1, 'hour').toISOString();
+
     const requestData = {
       ...data,
       destination_location: data.end_location,
-      end_time: data.start_time,
+      end_time: endTime,
       start_latitude: startCoords.latitude,
       start_longitude: startCoords.longitude,
       destination_latitude: endCoords.latitude,
@@ -116,22 +127,37 @@ export default function AddRequest() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-red-50 p-4">
+    <SafeAreaView
+      className={`flex-1 ${theme.dark ? 'bg-dark' : 'bg-gray-50'} p-4`}
+    >
       <Stack.Screen options={{ headerShown: false }} />
       <View className="mb-8 flex-row items-center justify-between">
         <Link href="../">
-          <Entypo name="circle-with-cross" size={32} color="black" />
+          <Entypo
+            name="circle-with-cross"
+            size={32}
+            color={theme.dark ? 'white' : 'black'}
+          />
         </Link>
-        <Button label="POST" onPress={handleSubmit(onSubmit)} />
+        <Pressable
+          onPress={handleSubmit(onSubmit)}
+          className="rounded-md bg-orange-500 px-2 py-1"
+        >
+          <Text className="text-xl font-semibold">
+            {translate('request.post')}
+          </Text>
+        </Pressable>
       </View>
 
       <View>
-        <Text className="mb-4 text-xl font-bold text-gray-900">
-          Add New Request
+        <Text className="mb-4 text-4xl font-bold text-gray-900">
+          {translate('request.add_new_request')}
         </Text>
 
         <View className="mb-20">
-          <Text className="mb-2 font-medium text-gray-700">From</Text>
+          <Text className="mb-2 font-medium text-gray-700">
+            {translate('request.from')}
+          </Text>
           <GooglePlacesAutocomplete
             placeholder="Where from?"
             minLength={4}
@@ -149,23 +175,29 @@ export default function AddRequest() {
             nearbyPlacesAPI="GooglePlacesSearch"
             debounce={200}
             styles={{
+              textInput: {
+                backgroundColor: theme.dark ? '#474747' : '#FFF',
+                color: theme.dark ? '#FFF' : '#000',
+              },
               listView: {
                 position: 'absolute',
                 top: 50,
-                backgroundColor: '#FFF',
+                backgroundColor: theme.dark ? '#474747' : '#FFF',
                 zIndex: 10,
               },
             }}
           />
           {errors.start_location && (
-            <Text className="mt-1 text-sm text-red-500">
+            <Text className="absolute bottom-[-65px] text-sm text-red-500">
               {errors.start_location.message}
             </Text>
           )}
         </View>
 
         <View className="mb-20">
-          <Text className="mb-2 font-medium text-gray-700">To</Text>
+          <Text className="mb-2 font-medium text-gray-700">
+            {translate('request.to')}
+          </Text>
           <GooglePlacesAutocomplete
             placeholder="Where to?"
             minLength={4}
@@ -183,24 +215,31 @@ export default function AddRequest() {
             nearbyPlacesAPI="GooglePlacesSearch"
             debounce={200}
             styles={{
+              textInput: {
+                backgroundColor: theme.dark ? '#474747' : '#FFF',
+                color: theme.dark ? '#FFF' : '#000',
+              },
               listView: {
                 position: 'absolute',
+                top: 50,
                 backgroundColor: '#FFF',
                 zIndex: 10,
               },
             }}
           />
           {errors.end_location && (
-            <Text className="mt-1 text-sm text-red-500">
+            <Text className="absolute bottom-[-65px] text-sm text-red-500">
               {errors.end_location.message}
             </Text>
           )}
         </View>
 
         <View className="mb-6">
-          <Text className="font-medium text-gray-700">Leaving Time:</Text>
+          <Text className="font-medium text-gray-700">
+            {translate('request.leaving_time')}:
+          </Text>
           <Text
-            className="text-gray-700 underline"
+            className={`mr-auto mt-2 ${theme.dark ? 'bg-gray-800' : 'bg-white'} p-4 text-gray-700 underline`}
             onPress={() => setStartPickerVisible(true)}
           >
             {startDate.toLocaleTimeString([], {
@@ -223,7 +262,9 @@ export default function AddRequest() {
         />
 
         <View className="mb-4">
-          <Text className="mb-2 font-medium text-gray-700">Note</Text>
+          <Text className="mb-2 font-medium text-gray-700">
+            {translate('request.note')}
+          </Text>
           <ControlledInput
             name="note"
             control={control}

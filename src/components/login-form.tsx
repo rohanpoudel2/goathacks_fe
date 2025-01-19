@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from '@/components/ui';
+import { translate } from '@/lib';
 
 const schema = z.object({
   username: z.string().optional(),
@@ -49,7 +50,7 @@ export const LoginForm = ({
           </Text>
 
           <Text className="mb-6 max-w-xs text-center text-gray-500">
-            Welcome! 👋
+            {translate('onboarding.welcome')}! 👋
           </Text>
         </View>
 

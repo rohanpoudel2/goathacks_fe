@@ -1,0 +1,42 @@
+{
+  "onboarding": {
+    "message": "Bienvenido a CommuteMate",
+    "welcome": "Bienvenido"
+  },
+  "home": {
+    "greetings_first": "¡Hola! ¿Qué tal?",
+    "greetings_second": "Estamos felices de que estés aquí"
+  },
+  "request": {
+    "add_new_request": "Agregar Nueva Solicitud",
+    "request_creator": "Creador de la Solicitud",
+    "where_to": "¿A dónde?",
+    "leaving_time": "Hora de salida",
+    "note": "Nota",
+    "creator": "Creador",
+    "from": "Desde",
+    "to": "Hasta",
+    "time": "Hora",
+    "depart": "Salida",
+    "estimated_arrival": "Llegada Estimada",
+    "interested": "Estoy Interesado",
+    "post": "Publicar"
+  },
+  "settings": {
+    "about": "Acerca de",
+    "profile": "Perfil",
+    "espanol": "Español",
+    "english": "Inglés",
+    "generale": "General",
+    "language": "Idioma",
+    "logout": "Cerrar sesión",
+    "theme": {
+      "dark": "Oscuro",
+      "light": "Claro",
+      "system": "Sistema",
+      "title": "Tema"
+    },
+    "title": "Configuración"
+  },
+  "welcome": "Bienvenido a CommuteMate"
+}

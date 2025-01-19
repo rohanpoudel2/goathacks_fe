@@ -1,34 +1,42 @@
 {
   "onboarding": {
-    "message": "Welcome to obytes app site"
+    "message": "Welcome to CommuteMate",
+    "welcome": "Welcome"
+  },
+  "home": {
+    "greetings_first": "Hi, there!",
+    "greetings_second": "Let's find you a commute buddy."
+  },
+  "request": {
+    "add_new_request": "Add New Request",
+    "request_creator": "Request Creator",
+    "where_to": "Where to?",
+    "leaving_time": "Leaving Time",
+    "note": "Note",
+    "creator": "Creator",
+    "from": "From",
+    "to": "To",
+    "time": "Time",
+    "depart": "Depart",
+    "estimated_arrival": "Estimated Arrival",
+    "interested": "I'm Interested",
+    "post": "Post"
   },
   "settings": {
     "about": "About",
     "profile": "Profile",
-    "app_name": "App Name",
-    "arabic": "Arabic",
+    "espanol": "Spanish",
     "english": "English",
     "generale": "General",
-    "github": "Github",
     "language": "Language",
-    "links": "Links",
     "logout": "Logout",
-    "more": "More",
-    "privacy": "Privacy Policy",
-    "rate": "Rate",
-    "share": "Share",
-    "support": "Support",
-    "support_us": "Support Us",
-    "terms": "Terms of Service",
     "theme": {
       "dark": "Dark",
       "light": "Light",
       "system": "System",
       "title": "Theme"
     },
-    "title": "Settings",
-    "version": "Version",
-    "website": "Website"
+    "title": "Settings"
   },
-  "welcome": "Welcome to obytes app site"
+  "welcome": "Welcome to CommuteMate"
 }
