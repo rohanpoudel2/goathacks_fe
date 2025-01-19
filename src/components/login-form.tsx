@@ -2,24 +2,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import {
   Button,
   ControlledInput,
+  SafeAreaView,
   Text,
-  TouchableOpacity,
   View,
 } from '@/components/ui';
 
 const schema = z.object({
-  name: z.string().optional(),
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email('Invalid email format'),
+  username: z.string().optional(),
   password: z
     .string({
       required_error: 'Password is required',
@@ -30,24 +24,21 @@ const schema = z.object({
 export type FormType = z.infer<typeof schema>;
 
 export type LoginFormProps = {
+  errorMessage: string;
   onSubmit?: SubmitHandler<FormType>;
   onForgotPassword?: () => void;
 };
 
 export const LoginForm = ({
+  errorMessage,
   onSubmit = () => {},
-  onForgotPassword = () => {},
 }: LoginFormProps) => {
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior="padding"
-      keyboardVerticalOffset={10}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
       <View className="flex-1 justify-center p-4">
         <View className="items-center justify-center">
           <Text
@@ -57,51 +48,29 @@ export const LoginForm = ({
             CommuteMate
           </Text>
 
-          <Text className="mb-6 max-w-xs text-center text-ride-pale_green-100">
-            Your Commute, Made Easy."
+          <Text className="mb-6 max-w-xs text-center text-gray-500">
+            Welcome! 👋
           </Text>
         </View>
 
-        <ControlledInput
-          testID="name"
-          control={control}
-          name="name"
-          label="Name"
-        />
+        <ControlledInput control={control} name="username" label="Username" />
 
         <ControlledInput
-          testID="email-input"
-          control={control}
-          name="email"
-          label="Email"
-        />
-        <ControlledInput
-          testID="password-input"
           control={control}
           name="password"
           label="Password"
-          placeholder="***"
+          placeholder="********"
           secureTextEntry={true}
         />
 
-        <Button
-          testID="login-button"
-          label="Sign In"
-          onPress={handleSubmit(onSubmit)}
-        />
+        <Button label="Login" onPress={handleSubmit(onSubmit)} />
 
-        <Button
-          testID="signup-button"
-          label="Sign Up!"
-          onPress={handleSubmit(onSubmit)}
-        />
-
-        <TouchableOpacity onPress={onForgotPassword}>
-          <Text className="mt-2 text-right text-blue-500">
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
+        {errorMessage && (
+          <View className="mt-4">
+            <Text className="text-center text-danger-600">{errorMessage}</Text>
+          </View>
+        )}
       </View>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
